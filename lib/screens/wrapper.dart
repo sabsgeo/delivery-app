@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:vegitabledelivery/screens/authenticate/authenticate.dart';
+import 'package:vegitabledelivery/screens/home/home.dart';
 
 class Wrapper extends StatefulWidget {
   @override
@@ -13,9 +14,7 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     List<Widget> _widgetOptions = <Widget>[
-      Text(
-        'Index 0: Home',
-      ),
+      Home(),
       Authenticate()
     ];
 
