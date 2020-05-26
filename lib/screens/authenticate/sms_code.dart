@@ -17,18 +17,34 @@ class _SmsCodeState extends State<SmsCode> {
     return Scaffold(
         backgroundColor: Hexcolor('#DFE9AC'),
         appBar: AppBar(
-          title: Text('Verify'),
-          backgroundColor: Hexcolor('#97BE11'),
+          elevation: 0.0,
+          backgroundColor: Hexcolor('#DFE9AC'),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: Hexcolor('#FFA820')),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
         body: Container(
-          padding: EdgeInsets.symmetric(vertical: 50, horizontal: 40.0),
+          padding: EdgeInsets.symmetric(vertical: 50, horizontal: 15.0),
           child: Column(
             children: <Widget>[
-              Text(
-                "Please provide the OTP code",
-                style: TextStyle(color: Hexcolor('#28590C')),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  "VERIFY DETAILS",
+                  style: TextStyle(color: Hexcolor('#28590C'), fontSize: 16.0,),
+                  textAlign: TextAlign.left,
+                ),
               ),
-              SizedBox(height: 15.0),
+              SizedBox(height: 10.0),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  "OTP sent to " +  phoneData['phone'],
+                  style: TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0),
+                  textAlign: TextAlign.left,
+                ),
+              ),
               PinFieldAutoFill(
                   decoration: UnderlineDecoration(
                       enteredColor: Hexcolor('#FFA820'),
@@ -42,8 +58,6 @@ class _SmsCodeState extends State<SmsCode> {
               RaisedButton(
                 color: Hexcolor('#97BE11'),
                 onPressed: () async {
-                  print(phoneData);
-                  print(this.pinCode);
                   if (phoneData['authCredential'] != null) {
                     await _auth.registerSignIn(
                         authCredential: phoneData['authCredential'],

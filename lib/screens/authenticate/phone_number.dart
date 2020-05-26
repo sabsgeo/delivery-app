@@ -22,23 +22,31 @@ class _PhoneNumberState extends State<PhoneNumber> {
     return Scaffold(
         backgroundColor: Hexcolor('#DFE9AC'),
         appBar: AppBar(
-          centerTitle: true,
-          title: Text('Login'),
-          backgroundColor: Hexcolor('#97BE11'),
+          elevation: 0.0,
+          backgroundColor: Hexcolor('#DFE9AC'),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: Hexcolor('#FFA820')),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
         body: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15.0),
+            padding: EdgeInsets.symmetric(vertical: 50, horizontal: 15.0),
             child: Form(
                 key: _formKey,
                 child: ListView(
                   children: <Widget>[
+                    Text(
+                      "ALMOST THERE!",
+                      style: TextStyle(color: Hexcolor('#28590C'), fontSize: 16.0,),
+                      textAlign: TextAlign.left,
+                    ),
                     SizedBox(height: 10.0),
                     Text(
-                      "Please enter your phone number",
-                      style: TextStyle(color: Hexcolor('#28590C')),
-                      textAlign: TextAlign.center,
+                      "Login or Sign up to place your order",
+                      style: TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0),
+                      textAlign: TextAlign.left,
                     ),
-                    SizedBox(height: 5.0),
+                    SizedBox(height: 10.0),
                     TextFormField(
                       keyboardType: TextInputType.phone,
                       style: TextStyle(

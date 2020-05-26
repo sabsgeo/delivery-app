@@ -26,15 +26,30 @@ class _RegisterUserState extends State<RegisterUser> {
     return Scaffold(
       backgroundColor: Hexcolor('#DFE9AC'),
       appBar: AppBar(
-        title: Text('Register'),
-        backgroundColor: Hexcolor('#97BE11'),
+        elevation: 0.0,
+        backgroundColor: Hexcolor('#DFE9AC'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Hexcolor('#FFA820')),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: Container(
-          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15.0),
+          padding: EdgeInsets.symmetric(vertical: 50, horizontal: 15.0),
           child: Form(
               key: _formKey,
               child: ListView(
                 children: <Widget>[
+                  Text(
+                    "SIGN UP",
+                    style: TextStyle(color: Hexcolor('#28590C'), fontSize: 16.0,),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    "Create an account with the new phone number",
+                    style: TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0),
+                    textAlign: TextAlign.left,
+                  ),
                   SizedBox(height: 10.0),
                   Row(
                     children: <Widget>[
