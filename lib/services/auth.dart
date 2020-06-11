@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:vegitabledelivery/services/database.dart';
+import 'package:vegitabledelivery/models/user.dart';
+import 'package:vegitabledelivery/services/user_database.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -54,7 +55,11 @@ class AuthService {
         codeAutoRetrievalTimeout: null);
   }
 
-  Future<FirebaseUser> registerSignIn({ AuthCredential authCredential, String code, String verificationId, AuthResult authResult, String firstName, String lastName, String email, String phone }) async {
+  User _userFromFirebaseUser(FirebaseUser user) {
+    return user !=null ? User(uid: user.uid): null;
+  }
+
+  Future<User> registerSignIn({ AuthCredential authCredential, String code, String verificationId, AuthResult authResult, String firstName, String lastName, String email, String phone }) async {
     if (authCredential == null) {
       authCredential = PhoneAuthProvider.getCredential(
           verificationId: verificationId, smsCode: code);
@@ -62,17 +67,30 @@ class AuthService {
 
     if (authResult == null) {
       authResult = await _auth.signInWithCredential(authCredential);
-      return authResult.user;
     } else {
       await authResult.user.linkWithCredential(authCredential);
-      DatabaseService userDb =
-          DatabaseService(uid: authResult.user.uid);
+      UserDatabaseService userDb =
+          UserDatabaseService(uid: authResult.user.uid);
       await userDb.saveUserInfo(
           firstName: firstName,
           lastName: lastName,
           email: email,
           phone: phone);
-      return authResult.user;
     }
+    return _userFromFirebaseUser(authResult.user);
+  }
+
+  Stream<User> get user {
+    return _auth.onAuthStateChanged
+        .map(_userFromFirebaseUser);
+  }
+
+  Future signOut() async {
+    try {
+      return _auth.signOut();
+    } catch(e) {
+      return null;
+    }
+
   }
 }

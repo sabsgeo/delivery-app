@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:vegitabledelivery/services/auth.dart';
-import 'package:vegitabledelivery/services/database.dart';
+import 'package:vegitabledelivery/services/user_database.dart';
 import 'package:vegitabledelivery/shared/constants.dart';
 
 class PhoneNumber extends StatefulWidget {
@@ -11,7 +11,6 @@ class PhoneNumber extends StatefulWidget {
 }
 
 class _PhoneNumberState extends State<PhoneNumber> {
-  final _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
   // Text Input state
@@ -37,13 +36,17 @@ class _PhoneNumberState extends State<PhoneNumber> {
                   children: <Widget>[
                     Text(
                       "ALMOST THERE!",
-                      style: TextStyle(color: Hexcolor('#28590C'), fontSize: 16.0,),
+                      style: TextStyle(
+                        color: Hexcolor('#28590C'),
+                        fontSize: 16.0,
+                      ),
                       textAlign: TextAlign.left,
                     ),
                     SizedBox(height: 10.0),
                     Text(
                       "Login or Sign up to place your order",
-                      style: TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0),
+                      style:
+                          TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0),
                       textAlign: TextAlign.left,
                     ),
                     SizedBox(height: 10.0),
@@ -72,30 +75,12 @@ class _PhoneNumberState extends State<PhoneNumber> {
                       color: Hexcolor('#97BE11'),
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                          DatabaseService db = DatabaseService();
+                          UserDatabaseService db = UserDatabaseService();
                           bool isRegistered =
                               await db.isUserRegistered(this.phone);
                           if (isRegistered) {
-                            Map data = await _auth.createVerifyUser(this.phone);
-                            if (data['state'] == 'VERIFICATION_COMPLETE') {
-                              Navigator.pushNamed(context, '/sms-code',
-                                  arguments: {
-                                    'authCredential': data['data']
-                                        ['authCredential'],
-                                    'emailAuthResult': data['data']
-                                        ['emailAuthResult'],
-                                    'phone': this.phone
-                                  });
-                            } else if (data['state'] == 'CODE_SENT') {
-                              Navigator.pushNamed(context, '/sms-code',
-                                  arguments: {
-                                    'verificationId': data['data']
-                                        ['verificationId'],
-                                    'emailAuthResult': data['data']
-                                        ['emailAuthResult'],
-                                    'phone': this.phone
-                                  });
-                            }
+                            Navigator.pushNamed(context, '/sms-code',
+                                arguments: {'phone': this.phone});
                           } else {
                             Navigator.pushNamed(context, '/register',
                                 arguments: {'phone': this.phone});

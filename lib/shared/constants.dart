@@ -17,3 +17,9 @@ InputDecoration textDecoration = InputDecoration(
     errorBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Hexcolor('#DC1E0B'), width: 2.0)),
     fillColor: Hexcolor('#FBFCEB'));
+
+extension StringExtension on String {
+    String capitalize() {
+        return "${this[0].toUpperCase()}${this.substring(1)}";
+    }
+}

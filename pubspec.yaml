@@ -14,19 +14,33 @@ description: A new Flutter application.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   firebase_auth: ^0.16.0
   cloud_firestore: ^0.13.5
+  firebase_storage: ^3.1.6
+  firebase_messaging: ^6.0.16
   hexcolor: ^1.0.2
   provider: ^4.1.2
   bloc: ^4.0.0
   flutter_bloc: ^4.0.0
   crypto: ^2.1.4
   sms_autofill: ^1.2.1
+  path_provider: ^1.6.9
+  font_awesome_flutter: ^8.8.1
+  cached_network_image: ^2.2.0+1
+  flutter_spinkit: "^4.1.2"
+  flare_flutter: ^2.0.3
+  get_it: ^4.0.2
+  flutter_local_notifications: ^1.4.4+1
+  overlay_support: ^1.0.4
+  steps_indicator: ^0.3.1
+  location: ^3.0.2
+  geolocator: ^5.3.2+2
+  splashscreen: ^1.2.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -37,7 +51,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
+analyzer:
+  enable-experiment:
+    - spread-collections
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -50,7 +66,19 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-
+    - assets/temp_pics/
+    - assets/flare/
+  fonts:
+    - family:  ReadyToEat
+      fonts:
+        - asset: assets/fonts/ReadyToEat_1.ttf
+    - family:  ReadyToCook
+      fonts:
+       - asset: assets/fonts/ReadyToCook_1.ttf
+         weight: 600
+    - family:  FreshFood
+      fonts:
+       - asset: assets/fonts/FreshFood.ttf
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

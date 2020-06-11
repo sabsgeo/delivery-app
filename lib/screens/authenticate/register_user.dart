@@ -10,7 +10,6 @@ class RegisterUser extends StatefulWidget {
 }
 
 class _RegisterUserState extends State<RegisterUser> {
-  final _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
   // Text Input state
@@ -41,13 +40,17 @@ class _RegisterUserState extends State<RegisterUser> {
                 children: <Widget>[
                   Text(
                     "SIGN UP",
-                    style: TextStyle(color: Hexcolor('#28590C'), fontSize: 16.0,),
+                    style: TextStyle(
+                      color: Hexcolor('#28590C'),
+                      fontSize: 16.0,
+                    ),
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 10.0),
                   Text(
                     "Create an account with the new phone number",
-                    style: TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0),
+                    style:
+                        TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0),
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 10.0),
@@ -128,40 +131,15 @@ class _RegisterUserState extends State<RegisterUser> {
                   SizedBox(height: 15.0),
                   RaisedButton(
                     color: Hexcolor('#97BE11'),
-                    onPressed: () async {
+                    onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        if (!this.isRegistering) {
-                          this.isRegistering = true;
-                          Map data = await _auth.createVerifyUser(
-                              phoneData['phone'],
-                              email: this.email,
-                              password: this.password);
-                          if (data['state'] == 'VERIFICATION_COMPLETE') {
-                            Navigator.pushNamed(context, '/sms-code',
-                                arguments: {
-                                  'authCredential': data['data']
-                                      ['authCredential'],
-                                  'emailAuthResult': data['data']
-                                      ['emailAuthResult'],
-                                  'firstName': firstName,
-                                  'lastName': lastName,
-                                  'email': email,
-                                  'phone': phoneData['phone']
-                                });
-                          } else if (data['state'] == 'CODE_SENT') {
-                            Navigator.pushNamed(context, '/sms-code',
-                                arguments: {
-                                  'verificationId': data['data']
-                                      ['verificationId'],
-                                  'emailAuthResult': data['data']['emailAuthResult'],
-                                  'firstName': firstName,
-                                  'lastName': lastName,
-                                  'email': email,
-                                  'phone': phoneData['phone']
-                                });
-                          }
-                          this.isRegistering = false;
-                        }
+                        Navigator.pushNamed(context, '/sms-code', arguments: {
+                          'firstName': this.firstName,
+                          'lastName': this.lastName,
+                          'email': this.email,
+                          'phone': phoneData['phone'],
+                          'password': this.password
+                        });
                       }
                     },
                     child: Text("Register"),
