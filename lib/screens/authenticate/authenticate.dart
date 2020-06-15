@@ -55,10 +55,6 @@ class _AuthenticateState extends State<Authenticate> {
           return SafeArea(
             child: Scaffold(
                 backgroundColor: Colors.white,
-                appBar: AppBar(
-                  elevation: 0.0,
-                  backgroundColor: Colors.white,
-                ),
                 body: Padding(
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15.0),
                   child: Center(
