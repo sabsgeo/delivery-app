@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:steps_indicator/steps_indicator.dart';
-import 'package:vegitabledelivery/models/address.dart';
 import 'package:vegitabledelivery/models/order.dart';
 import 'package:vegitabledelivery/models/user.dart';
 import 'package:vegitabledelivery/services/auth.dart';
@@ -30,10 +28,10 @@ class OrderSummary extends StatelessWidget {
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return Scaffold(
-                backgroundColor: Hexcolor('#DFE9AC'),
+                backgroundColor: Colors.white,
                 body: Center(
                   child: SpinKitCubeGrid(
-                    color: Hexcolor('#97BE11'),
+                    color: Colors.green[500],
                     size: 80.0,
                   ),
                 ));
@@ -49,7 +47,7 @@ class OrderSummary extends StatelessWidget {
           Widget selectedIcon = Icon(
             Icons.access_time,
             size: 16.0,
-            color: Hexcolor('#28590C'),
+            color: Colors.green[900],
           );
           String titleText = 'Awaiting confirmation';
 
@@ -59,7 +57,7 @@ class OrderSummary extends StatelessWidget {
             selectedIcon = Icon(
               Icons.motorcycle,
               size: 20.0,
-              color: Hexcolor('#28590C'),
+              color: Colors.green[900],
             );
           } else if (snapshot.data['order_status'] ==
               OrderStatus.ORDER_ACCEPTED.toString()) {
@@ -67,7 +65,7 @@ class OrderSummary extends StatelessWidget {
             selectedIcon = Icon(
               Icons.playlist_add_check,
               size: 20.0,
-              color: Hexcolor('#28590C'),
+              color: Colors.green[900],
             );
           } else if (snapshot.data['order_status'] ==
               OrderStatus.AWAITING_CONFORMATION.toString()) {
@@ -75,7 +73,7 @@ class OrderSummary extends StatelessWidget {
             selectedIcon = Icon(
               Icons.access_time,
               size: 16.0,
-              color: Hexcolor('#28590C'),
+              color: Colors.green[900],
             );
           } else if (snapshot.data['order_status'] ==
               OrderStatus.ORDER_DELIVERED.toString()) {
@@ -83,7 +81,7 @@ class OrderSummary extends StatelessWidget {
             selectedIcon = Icon(
               Icons.done,
               size: 20.0,
-              color: Hexcolor('#28590C'),
+              color: Colors.green[900],
             );
           } else if (snapshot.data['order_status'] ==
               OrderStatus.ORDER_CANCELLED.toString()) {
@@ -91,7 +89,7 @@ class OrderSummary extends StatelessWidget {
             selectedIcon = Icon(
               Icons.clear,
               size: 20.0,
-              color: Hexcolor('#28590C'),
+              color: Colors.green[900],
             );
           } else if (snapshot.data['order_status'] ==
               OrderStatus.ORDER_DECLINED.toString()) {
@@ -99,23 +97,23 @@ class OrderSummary extends StatelessWidget {
             selectedIcon = Icon(
               Icons.clear,
               size: 20.0,
-              color: Hexcolor('#28590C'),
+              color: Colors.green[900],
             );
           }
           var objectData = Map.from(snapshot.data['address']);
           String finalAddress =
               '${objectData['house']}, ${objectData['landmark']}, ${objectData['subThoroughfare']}, ${objectData['subLocality']}, ${objectData['locality']}, ${objectData['administrativeArea']}, ${objectData['postalCode']}, ${objectData['country']}';
           return Scaffold(
-              backgroundColor: Hexcolor('#DFE9AC'),
+              backgroundColor: Colors.white,
               appBar: AppBar(
                 elevation: 2.0,
-                backgroundColor: Hexcolor('#DFE9AC'),
+                backgroundColor: Colors.white,
                 title: Text(
                   'ORDER SUMMARY',
-                  style: TextStyle(fontSize: 18.0, color: Hexcolor('#28590C')),
+                  style: TextStyle(fontSize: 18.0, color: Colors.green[900]),
                 ),
                 leading: IconButton(
-                  icon: Icon(Icons.arrow_back_ios, color: Hexcolor('#FFA820')),
+                  icon: Icon(Icons.arrow_back_ios, color: Colors.green[900]),
                   onPressed: () async {
                     if (navData['from'] == 'notification') {
                       await Navigator.pushReplacementNamed(context, '/');
@@ -141,20 +139,20 @@ class OrderSummary extends StatelessWidget {
                                 isHorizontal: false,
                                 selectedStep: 0,
                                 nbSteps: 2,
-                                doneLineColor: Hexcolor('#28590C'),
-                                undoneLineColor: Hexcolor('#28590C'),
+                                doneLineColor: Colors.green[900],
+                                undoneLineColor: Colors.green[900],
                                 lineThickness: 2.0,
                                 lineLength: 30,
                                 unselectedStepWidget: Row(
                                   children: <Widget>[
                                     Icon(Icons.location_on,
-                                        color: Hexcolor('#FFA820')),
+                                        color: Colors.amber[500]),
                                   ],
                                 ),
                                 selectedStepWidget: Row(
                                   children: <Widget>[
                                     Icon(Icons.location_on,
-                                        color: Hexcolor('#FFA820')),
+                                        color: Colors.amber[500]),
                                   ],
                                 ),
                               ),
@@ -167,7 +165,7 @@ class OrderSummary extends StatelessWidget {
                                     'Store',
                                     style: TextStyle(
                                       fontSize: 8.0,
-                                      color: Hexcolor('#28590C'),
+                                      color: Colors.green[900],
                                     ),
                                     textAlign: TextAlign.left,
                                   ),
@@ -180,7 +178,7 @@ class OrderSummary extends StatelessWidget {
                                       finalAddress,
                                       style: TextStyle(
                                         fontSize: 8.0,
-                                        color: Hexcolor('#28590C'),
+                                        color: Colors.green[900],
                                       ),
                                     ),
                                   )
@@ -203,7 +201,7 @@ class OrderSummary extends StatelessWidget {
                                       titleText,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          color: Hexcolor('#28590C'),
+                                          color: Colors.green[900],
                                           fontSize: 10.0),
                                     ),
                                   ),
@@ -224,7 +222,7 @@ class OrderSummary extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(0.0),
                         child: Card(
-                          color: Hexcolor('#DFE9AC'),
+                          color: Colors.white,
                           child: Padding(
                             padding:
                                 const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
@@ -248,8 +246,8 @@ class OrderSummary extends StatelessWidget {
                                           Icons.brightness_1,
                                           size: 12.0,
                                           color: isVeg
-                                              ? Hexcolor('#97BE11')
-                                              : Hexcolor('#DC1E0B'),
+                                              ? Colors.green[500]
+                                              : Colors.red[900],
                                         ),
                                         SizedBox(
                                           width: 4.0,

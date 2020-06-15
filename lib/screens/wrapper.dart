@@ -5,14 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:vegitabledelivery/models/user.dart';
 import 'package:vegitabledelivery/screens/authenticate/authenticate.dart';
 import 'package:vegitabledelivery/screens/cart/cart.dart';
-import 'package:vegitabledelivery/screens/home/home.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:vegitabledelivery/services/freshgreen_database.dart';
+import 'package:vegitabledelivery/screens/home/options.dart';
 import 'package:vegitabledelivery/services/notification.dart';
 
 class Wrapper extends StatefulWidget {
@@ -30,7 +28,6 @@ class _WrapperState extends State<Wrapper> {
     precacheImage(
         AssetImage('assets/temp_pics/veg_fruits_background.png'), context);
     warmUpFlare();
-    await FreshGreenDatabaseService().getAllFreshGreen();
   }
 
   @override
@@ -55,7 +52,7 @@ class _WrapperState extends State<Wrapper> {
     userAuthenticated = Provider.of<User>(context) == null ? false : true;
 
     List<Widget> _widgetOptions = <Widget>[
-      Home(userAuthenticated),
+      AllOptions(userAuthenticated),
       Authenticate(userAuthenticated),
       Cart(userAuthenticated)
     ];
@@ -64,16 +61,16 @@ class _WrapperState extends State<Wrapper> {
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return Scaffold(
-                backgroundColor: Hexcolor('#DFE9AC'),
+                backgroundColor: Colors.white,
                 body: Center(
                   child: SpinKitCubeGrid(
-                    color: Hexcolor('#97BE11'),
+                    color: Colors.green[500],
                     size: 80.0,
                   ),
                 ));
           }
           return Scaffold(
-            backgroundColor: Hexcolor('#DFE9AC'),
+            backgroundColor: Colors.white,
             body: Center(
               child: _widgetOptions.elementAt(_selectedIndex),
             ),
@@ -81,43 +78,43 @@ class _WrapperState extends State<Wrapper> {
               height: 45.0,
               child: BottomNavigationBar(
                 iconSize: 20.0,
-                backgroundColor: Hexcolor('#DFE9AC'),
+                backgroundColor: Colors.green[500],
                 elevation: 50.0,
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                     icon: FaIcon(
                       FontAwesomeIcons.list,
-                      color: Hexcolor('#FFA820'),
+                      color: Colors.white,
                       size: 13.0,
                     ),
                     title: Text(
                       'Items',
                       style:
-                          TextStyle(fontSize: 10.0, color: Hexcolor('#FFA820')),
+                          TextStyle(fontSize: 10.0, color: Colors.white),
                     ),
                   ),
                   BottomNavigationBarItem(
                     icon: FaIcon(
                       FontAwesomeIcons.userAlt,
-                      color: Hexcolor('#FFA820'),
+                      color: Colors.white,
                       size: 13.0,
                     ),
                     title: Text(
                       'Account',
                       style:
-                          TextStyle(fontSize: 10.0, color: Hexcolor('#FFA820')),
+                          TextStyle(fontSize: 10.0, color: Colors.white),
                     ),
                   ),
                   BottomNavigationBarItem(
                     icon: FaIcon(
                       FontAwesomeIcons.shoppingCart,
-                      color: Hexcolor('#FFA820'),
+                      color: Colors.white,
                       size: 13.0,
                     ),
                     title: Text(
                       'Cart',
                       style:
-                          TextStyle(fontSize: 10.0, color: Hexcolor('#FFA820')),
+                          TextStyle(fontSize: 10.0, color: Colors.white),
                     ),
                   ),
                 ],

@@ -1,12 +1,11 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 class SuccessTick extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Hexcolor('#DFE9AC'),
+        backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.fromLTRB(10.0, 8.0, 10.0, 8.0),
           child: Center(
@@ -20,15 +19,15 @@ class SuccessTick extends StatelessWidget {
                     animation: "success",
                   ),
                 ),
-                Text('Order Placed', style: TextStyle(color:  Hexcolor('#28590C'), fontWeight: FontWeight.w900),),
+                Text('Order Placed', style: TextStyle(color:  Colors.green[900], fontWeight: FontWeight.w900),),
                 SizedBox(height: 10.0,),
                 RaisedButton(
-                  color: Hexcolor('#97BE11'),
+                  color: Colors.green[500],
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/');
                   },
                   child: Text("Back home",
-                      style: TextStyle(color: Hexcolor('#28590C'))),
+                      style: TextStyle(color: Colors.green[900])),
                 )
               ],
             ),

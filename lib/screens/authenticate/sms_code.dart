@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 import 'package:vegitabledelivery/services/auth.dart';
 
@@ -48,20 +47,20 @@ class _SmsCodeState extends State<SmsCode> {
             builder: (futureContext, AsyncSnapshot snapshot) {
               if (snapshot.connectionState != ConnectionState.done) {
                 return Scaffold(
-                    backgroundColor: Hexcolor('#DFE9AC'),
+                    backgroundColor: Colors.white,
                     appBar: AppBar(
                       elevation: 0.0,
-                      backgroundColor: Hexcolor('#DFE9AC'),
+                      backgroundColor: Colors.white,
                       leading: IconButton(
                         icon: Icon(Icons.arrow_back_ios,
-                            color: Hexcolor('#FFA820')),
+                            color: Colors.amber[500]),
                         onPressed: () => Navigator.of(context).pop(),
                       ),
                     ),
                     body: Container(
                       child: Center(
                         child: SpinKitCubeGrid(
-                          color: Hexcolor('#97BE11'),
+                          color: Colors.green[500],
                           size: 80.0,
                         ),
                       ),
@@ -69,13 +68,13 @@ class _SmsCodeState extends State<SmsCode> {
               }
               phoneData = snapshot.data;
               return Scaffold(
-                  backgroundColor: Hexcolor('#DFE9AC'),
+                  backgroundColor: Colors.white,
                   appBar: AppBar(
                     elevation: 0.0,
-                    backgroundColor: Hexcolor('#DFE9AC'),
+                    backgroundColor: Colors.white,
                     leading: IconButton(
                       icon: Icon(Icons.arrow_back_ios,
-                          color: Hexcolor('#FFA820')),
+                          color: Colors.amber[500]),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ),
@@ -89,7 +88,7 @@ class _SmsCodeState extends State<SmsCode> {
                           child: Text(
                             "VERIFY DETAILS",
                             style: TextStyle(
-                              color: Hexcolor('#28590C'),
+                              color: Colors.green[900],
                               fontSize: 16.0,
                             ),
                             textAlign: TextAlign.left,
@@ -101,23 +100,23 @@ class _SmsCodeState extends State<SmsCode> {
                           child: Text(
                             "OTP sent to " + phoneData['phone'],
                             style: TextStyle(
-                                color: Hexcolor('#28590C'), fontSize: 10.0),
+                                color: Colors.green[900], fontSize: 10.0),
                             textAlign: TextAlign.left,
                           ),
                         ),
                         PinFieldAutoFill(
                             decoration: UnderlineDecoration(
-                                enteredColor: Hexcolor('#FFA820'),
-                                color: Hexcolor('#FFA820'),
+                                enteredColor: Colors.amber[500],
+                                color: Colors.amber[500],
                                 textStyle: TextStyle(
-                                    color: Hexcolor('#28590C'),
+                                    color: Colors.green[900],
                                     fontSize: 25.0)),
                             onCodeChanged: (String verificationCode) {
                               this.pinCode = verificationCode;
                             }),
                         SizedBox(height: 20.0),
                         RaisedButton(
-                          color: Hexcolor('#97BE11'),
+                          color: Colors.green[500],
                           onPressed: () async {
                             setState(() {
                               this.isVerified = true;
@@ -146,18 +145,18 @@ class _SmsCodeState extends State<SmsCode> {
                             await Navigator.pushReplacementNamed(context, '/');
                           },
                           child: Text("Verify",
-                              style: TextStyle(color: Hexcolor('#28590C'))),
+                              style: TextStyle(color: Colors.green[900])),
                         )
                       ],
                     ),
                   ));
             })
         : Scaffold(
-            backgroundColor: Hexcolor('#DFE9AC'),
+            backgroundColor: Colors.white,
             body: Container(
               child: Center(
                 child: SpinKitCubeGrid(
-                  color: Hexcolor('#97BE11'),
+                  color: Colors.green[500],
                   size: 80.0,
                 ),
               ),

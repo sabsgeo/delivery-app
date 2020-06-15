@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:vegitabledelivery/models/address.dart';
 import 'package:vegitabledelivery/services/user_database.dart';
 import 'package:vegitabledelivery/shared/constants.dart';
@@ -18,16 +17,15 @@ class _AddressListState extends State<AddressList> {
     bool isSelectAddress = ModalRoute.of(context).settings.arguments == null
         ? false
         : routeData['isSelectAddress'];
-    print(isSelectAddress);
     return FutureBuilder(
         future: UserDatabaseService().getAllAddress(),
         builder: (futureContext, AsyncSnapshot snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return Scaffold(
-                backgroundColor: Hexcolor('#DFE9AC'),
+                backgroundColor: Colors.white,
                 body: Center(
                   child: SpinKitCubeGrid(
-                    color: Hexcolor('#97BE11'),
+                    color: Colors.green[500],
                     size: 80.0,
                   ),
                 ));
@@ -37,60 +35,61 @@ class _AddressListState extends State<AddressList> {
             child: Scaffold(
               appBar: AppBar(
                 elevation: 2.0,
-                backgroundColor: Hexcolor('#DFE9AC'),
+                backgroundColor: Colors.white,
                 title: Text(
                   isSelectAddress ? 'SELECT ADDRESS' : 'ADD ADDRESS',
-                  style: TextStyle(fontSize: 18.0, color: Hexcolor('#28590C')),
+                  style: TextStyle(fontSize: 18.0, color: Colors.green[900]),
                 ),
                 leading: IconButton(
-                  icon: Icon(Icons.arrow_back_ios, color: Hexcolor('#FFA820')),
+                  icon: Icon(Icons.arrow_back_ios, color: Colors.green[900]),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
-              backgroundColor: Hexcolor('#DFE9AC'),
+              backgroundColor: Colors.white,
               body: Column(
                 children: <Widget>[
                   Expanded(
                     child: ListView.builder(
                       itemCount: allAddress.length,
                       itemBuilder: (listContext, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Card(
-                            color: Hexcolor('#DFE9AC'),
-                            child: ListTile(
-                              leading: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.location_on,
-                                    color: Hexcolor('#FFA820'),
-                                  ),
-                                ],
+                        return GestureDetector(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Card(
+                              color: Colors.white,
+                              child: ListTile(
+                                leading: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.location_on,
+                                      color: Colors.amber[500],
+                                    ),
+                                  ],
+                                ),
+                                title: Text(
+                                  allAddress[index].saveAs.capitalize(),
+                                  style: TextStyle(
+                                      color: Colors.green[900], fontSize: 14.0),
+                                ),
+                                subtitle: Text(
+                                  '${allAddress[index].house}, ${allAddress[index].landmark}, ${allAddress[index].subThoroughfare}, ${allAddress[index].subLocality}, ${allAddress[index].locality}, ${allAddress[index].administrativeArea}, ${allAddress[index].postalCode}, ${allAddress[index].country}',
+                                  style: TextStyle(
+                                      color: Colors.green[900], fontSize: 12.0),
+                                ),
+                                trailing: isSelectAddress? Icon(
+                                      Icons.keyboard_arrow_right,
+                                      size: 18.0,
+                                      color: Colors.amber[500],
+                                    ): null,
                               ),
-                              title: Text(
-                                allAddress[index].saveAs.capitalize(),
-                                style: TextStyle(
-                                    color: Hexcolor('28590C'), fontSize: 14.0),
-                              ),
-                              subtitle: Text(
-                                '${allAddress[index].house}, ${allAddress[index].landmark}, ${allAddress[index].subThoroughfare}, ${allAddress[index].subLocality}, ${allAddress[index].locality}, ${allAddress[index].administrativeArea}, ${allAddress[index].postalCode}, ${allAddress[index].country}',
-                                style: TextStyle(
-                                    color: Hexcolor('28590C'), fontSize: 12.0),
-                              ),
-                              trailing: IconButton(
-                                  icon: Icon(
-                                    Icons.keyboard_arrow_right,
-                                    size: 18.0,
-                                    color: Hexcolor('#FFA820'),
-                                  ),
-                                  onPressed: () {
-                                    appData.selectedAddress = allAddress[index];
-                                    Navigator.pop(context);
-                                  }),
                             ),
                           ),
+                          onTap: isSelectAddress?() async {
+                            appData.selectedAddress = allAddress[index];
+                            Navigator.pop(context);
+                          } : null,
                         );
                       },
                     ),
@@ -104,9 +103,9 @@ class _AddressListState extends State<AddressList> {
                         onPressed: () async {
                           await Navigator.pushNamed(context, '/add-address');
                         },
-                        color: Hexcolor('#97BE11'),
+                        color: Colors.green[500],
                         child: Text("Add address",
-                            style: TextStyle(color: Hexcolor('#28590C'))),
+                            style: TextStyle(color: Colors.green[900])),
                       ),
                     ),
                   )

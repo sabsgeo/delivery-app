@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
+import 'package:vegitabledelivery/models/ordered_items.dart';
 import 'package:vegitabledelivery/services/location.dart';
 import 'package:vegitabledelivery/services/user_database.dart';
 import 'package:vegitabledelivery/shared/constants.dart';
-import 'package:vegitabledelivery/singletons/app_data.dart';
 
 class AddAddress extends StatefulWidget {
   @override
@@ -27,22 +27,22 @@ class _AddAddressState extends State<AddAddress> {
         builder: (futureContext, AsyncSnapshot snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return Scaffold(
-                backgroundColor: Hexcolor('#DFE9AC'),
+                backgroundColor: Colors.white,
                 body: Center(
                   child: SpinKitCubeGrid(
-                    color: Hexcolor('#97BE11'),
+                    color: Colors.green[500],
                     size: 80.0,
                   ),
                 ));
           }
           this.locationData = snapshot.data;
           return Scaffold(
-            backgroundColor: Hexcolor('#DFE9AC'),
+            backgroundColor: Colors.white,
             appBar: AppBar(
               elevation: 0.0,
-              backgroundColor: Hexcolor('#DFE9AC'),
+              backgroundColor: Colors.white,
               leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios, color: Hexcolor('#FFA820')),
+                icon: Icon(Icons.arrow_back_ios, color: Colors.green[900]),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
@@ -56,12 +56,12 @@ class _AddAddressState extends State<AddAddress> {
                           children: <Widget>[
                             Icon(
                               Icons.location_on,
-                              color: Hexcolor('#FFA820'),
+                              color: Colors.amber[500],
                             ),
                             Text(
                               snapshot.data['subLocality'],
                               style: TextStyle(
-                                color: Hexcolor('#28590C'),
+                                color: Colors.green[900],
                                 fontSize: 16.0,
                               ),
                               textAlign: TextAlign.left,
@@ -72,7 +72,7 @@ class _AddAddressState extends State<AddAddress> {
                         Text(
                           '${snapshot.data['subThoroughfare']}, ${snapshot.data['subLocality']}, ${snapshot.data['locality']}, ${snapshot.data['administrativeArea']}, ${snapshot.data['postalCode']}, ${snapshot.data['country']}',
                           style: TextStyle(
-                              color: Hexcolor('#28590C'), fontSize: 10.0),
+                              color: Colors.green[900], fontSize: 10.0),
                           softWrap: true,
                           textAlign: TextAlign.left,
                         ),
@@ -127,7 +127,7 @@ class _AddAddressState extends State<AddAddress> {
                         ),
                         SizedBox(height: 15.0),
                         RaisedButton(
-                          color: Hexcolor('#97BE11'),
+                          color: Colors.green[500],
                           onPressed: this.savedClicked ? null : _saveAddress,
                           child: Text("Save and Continue"),
                         ),
@@ -147,7 +147,7 @@ class _AddAddressState extends State<AddAddress> {
       completeAddress['landmark'] = this.landmark;
       completeAddress['saveAs'] = this.saveAs;
       await UserDatabaseService().saveNewAddress(completeAddress);
-      if (appData.orderedItems.keys.length > 0) {
+      if (Provider.of<Map<String, EachOrderedItem>>(context, listen: false).keys.length > 0) {
         await Navigator.pushReplacementNamed(context, '/cart');
       } else {
         await Navigator.pushReplacementNamed(context, '/');

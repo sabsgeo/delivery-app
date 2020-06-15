@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
+import 'package:vegitabledelivery/models/fresh_green.dart';
 import 'package:vegitabledelivery/models/order.dart';
-import 'package:vegitabledelivery/services/auth.dart';
+import 'package:vegitabledelivery/models/ordered_items.dart';
 import 'package:vegitabledelivery/services/location.dart';
-import 'package:vegitabledelivery/services/navigator.dart';
 import 'package:vegitabledelivery/services/order.dart';
 import 'package:vegitabledelivery/shared/widgets/expansion_panel_custom.dart';
-import 'package:vegitabledelivery/singletons/app_data.dart';
+
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+}
 
 class Authenticate extends StatefulWidget {
   final bool userAuthenticated;
@@ -35,10 +42,10 @@ class _AuthenticateState extends State<Authenticate> {
           if (snapshot.connectionState != ConnectionState.done) {
             return SafeArea(
                 child: Scaffold(
-              backgroundColor: Hexcolor('#DFE9AC'),
+              backgroundColor: Colors.white,
               body: Center(
                 child: SpinKitCubeGrid(
-                  color: Hexcolor('#97BE11'),
+                  color: Colors.green[500],
                   size: 80.0,
                 ),
               ),
@@ -47,39 +54,54 @@ class _AuthenticateState extends State<Authenticate> {
           this.orderData = snapshot.data;
           return SafeArea(
             child: Scaffold(
-                backgroundColor: Hexcolor('#DFE9AC'),
-                body: Center(
-                    child: Container(
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                  elevation: 0.0,
+                  backgroundColor: Colors.white,
+                ),
+                body: Padding(
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15.0),
-                  child: ListView(
-                    children: <Widget>[
-                      Center(
-                        child: Container(
-                            width: 200.0,
-                            height: 200.0,
-                            decoration: new BoxDecoration(
-                                image: new DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image:
-                                        AssetImage('assets/green_veg.jpg')))),
-                      ),
-                      SizedBox(height: 15.0),
-                      SizedBox(
-                        width: double.infinity,
-                        child: Text(
-                          "ACCOUNT",
-                          style: TextStyle(
-                            color: Hexcolor('#28590C'),
-                            fontSize: 16.0,
-                          ),
-                          textAlign: TextAlign.left,
+                  child: Center(
+                    child: ScrollConfiguration(
+                      behavior: MyBehavior(),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                                width: MediaQuery.of(context).size.height >
+                                        MediaQuery.of(context).size.width
+                                    ? MediaQuery.of(context).size.width * .75
+                                    : MediaQuery.of(context).size.height * .75,
+                                height: MediaQuery.of(context).size.height >
+                                        MediaQuery.of(context).size.width
+                                    ? MediaQuery.of(context).size.width * .75
+                                    : MediaQuery.of(context).size.height * .75,
+                                decoration: new BoxDecoration(
+                                    image: new DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: AssetImage(
+                                            'assets/online-shopping.jpg')))),
+                            SizedBox(height: 15.0),
+                            SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                "ACCOUNT",
+                                style: TextStyle(
+                                  color: Colors.green[900],
+                                  fontSize: 16.0,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                            SizedBox(height: 10.0),
+                            ..._login(context, this.widget.userAuthenticated)
+                          ],
                         ),
                       ),
-                      SizedBox(height: 15.0),
-                      ..._login(context, this.widget.userAuthenticated)
-                    ],
+                    ),
                   ),
-                ))),
+                )),
           );
         });
   }
@@ -92,7 +114,7 @@ class _AuthenticateState extends State<Authenticate> {
           child: Text(
             "Login/create account to quickly manage orders",
             style: TextStyle(
-              color: Hexcolor('#28590C'),
+              color: Colors.green[900],
               fontSize: 10.0,
             ),
             textAlign: TextAlign.left,
@@ -102,13 +124,13 @@ class _AuthenticateState extends State<Authenticate> {
         SizedBox(
           width: double.infinity,
           child: RaisedButton(
-            color: Hexcolor('#97BE11'),
+            color: Colors.green[500],
             onPressed: () async {
               await Navigator.pushNamed(context, '/phone-number');
             },
-            child: Text("Login", style: TextStyle(color: Hexcolor('#28590C'))),
+            child: Text("Login", style: TextStyle(color: Colors.green[900])),
           ),
-        )
+        ),
       ];
     } else {
       return [ExpansionPanelCustom(data: _data, children: accountInfo)];
@@ -119,6 +141,15 @@ class _AuthenticateState extends State<Authenticate> {
     if (index == 0) {
       return [Container()];
     } else if (index == 1) {
+      if (orderData.length < 1) {
+        return [
+          Text(
+            'Thank you for installing\n We are waiting for your order',
+            style: TextStyle(fontSize: 12.0, color: Colors.green[900]),
+            textAlign: TextAlign.center,
+          )
+        ];
+      }
       return orderData.map((Order e) {
         bool isLastElement = false;
         if (orderData[orderData.length - 1].id == e.id) {
@@ -129,7 +160,7 @@ class _AuthenticateState extends State<Authenticate> {
         Widget selectedIcon = Icon(
           Icons.access_time,
           size: 16.0,
-          color: Hexcolor('#28590C'),
+          color: Colors.green[900],
         );
         double total = 0;
         Widget actionButtons = Container();
@@ -138,13 +169,13 @@ class _AuthenticateState extends State<Authenticate> {
           selectedIcon = Icon(
             Icons.motorcycle,
             size: 20.0,
-            color: Hexcolor('#28590C'),
+            color: Colors.green[900],
           );
           actionButtons = Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               RaisedButton(
-                color: Hexcolor('#97BE11'),
+                color: Colors.green[500],
                 onPressed: () async {
                   Map<String, dynamic> details = new Map();
                   details['orderId'] = e.id;
@@ -156,8 +187,7 @@ class _AuthenticateState extends State<Authenticate> {
                   Navigator.pushNamed(context, '/summary', arguments: details);
                 },
                 child: Text("Summary",
-                    style:
-                        TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0)),
+                    style: TextStyle(color: Colors.green[900], fontSize: 10.0)),
               )
             ],
           );
@@ -166,13 +196,13 @@ class _AuthenticateState extends State<Authenticate> {
           selectedIcon = Icon(
             Icons.playlist_add_check,
             size: 20.0,
-            color: Hexcolor('#28590C'),
+            color: Colors.green[900],
           );
           actionButtons = Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               RaisedButton(
-                color: Hexcolor('#97BE11'),
+                color: Colors.green[500],
                 onPressed: () async {
                   Map<String, dynamic> details = new Map();
                   details['orderId'] = e.id;
@@ -184,8 +214,7 @@ class _AuthenticateState extends State<Authenticate> {
                   Navigator.pushNamed(context, '/summary', arguments: details);
                 },
                 child: Text("Summary",
-                    style:
-                        TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0)),
+                    style: TextStyle(color: Colors.green[900], fontSize: 10.0)),
               )
             ],
           );
@@ -195,7 +224,7 @@ class _AuthenticateState extends State<Authenticate> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               RaisedButton(
-                color: Hexcolor('#97BE11'),
+                color: Colors.green[500],
                 onPressed: () async {
                   Map<String, dynamic> details = new Map();
                   details['orderId'] = e.id;
@@ -203,18 +232,16 @@ class _AuthenticateState extends State<Authenticate> {
                   Navigator.pushNamed(context, '/summary', arguments: details);
                 },
                 child: Text("Summary",
-                    style:
-                        TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0)),
+                    style: TextStyle(color: Colors.green[900], fontSize: 10.0)),
               ),
               RaisedButton(
-                color: Hexcolor('#97BE11'),
+                color: Colors.green[500],
                 onPressed: () async {
                   await OrderItems().cancelOrder(e.id);
                   Navigator.pushReplacementNamed(context, '/');
                 },
                 child: Text("Cancel",
-                    style:
-                    TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0)),
+                    style: TextStyle(color: Colors.green[900], fontSize: 10.0)),
               )
             ],
           );
@@ -223,34 +250,47 @@ class _AuthenticateState extends State<Authenticate> {
           selectedIcon = Icon(
             Icons.done,
             size: 20.0,
-            color: Hexcolor('#28590C'),
+            color: Colors.green[900],
           );
           actionButtons = Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               RaisedButton(
-                color: Hexcolor('#97BE11'),
+                color: Colors.green[500],
                 onPressed: () async {
-                  appData.orderedItems = {};
+                  var model = Provider.of<OrderedItems>(context);
+                  model.clearAllData();
                   e.items.forEach((key, value) {
-                    appData.orderedItems['key'] = value;
+                    print(value);
+//                    FreshGreen eachGoingtoAddItem = FreshGreen()
+//                    model.addNewItem(
+//                        key,
+//                        EachOrderedItem(key,
+//                            num: value['num'],
+//                            index: value['index'],
+//                            name: value['name'],
+//                            minQuantity: value['minQuantity'],
+//                            price: value['price'],
+//                            isVeg: value['isVeg']));
                   });
                   Navigator.pushReplacementNamed(context, '/cart');
                 },
                 child: Text("Reorder",
-                    style:
-                        TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0)),
+                    style: TextStyle(color: Colors.green[900], fontSize: 10.0)),
               ),
               RaisedButton(
-                color: Hexcolor('#97BE11'),
-                onPressed: e.rating > -1 ? null : () async {
-                  Navigator.pushNamed(context, '/rate-us', arguments: {
-                    'orderId': e.id
-                  });
-                },
-                child: Text(e.rating > -1? "Rated ${e.rating.toString()}":"Rate order",
-                    style:
-                        TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0)),
+                color: Colors.green[500],
+                onPressed: e.rating > -1
+                    ? null
+                    : () async {
+                        Navigator.pushNamed(context, '/rate-us',
+                            arguments: {'orderId': e.id});
+                      },
+                child: Text(
+                    e.rating > -1
+                        ? "Rated ${e.rating.toString()}"
+                        : "Rate order",
+                    style: TextStyle(color: Colors.green[900], fontSize: 10.0)),
               ),
             ],
           );
@@ -259,7 +299,7 @@ class _AuthenticateState extends State<Authenticate> {
           selectedIcon = Icon(
             Icons.clear,
             size: 20.0,
-            color: Hexcolor('#28590C'),
+            color: Colors.green[900],
           );
           actionButtons = Container();
         } else if (e.orderStatus == OrderStatus.ORDER_DECLINED) {
@@ -267,7 +307,7 @@ class _AuthenticateState extends State<Authenticate> {
           selectedIcon = Icon(
             Icons.clear,
             size: 20.0,
-            color: Hexcolor('#28590C'),
+            color: Colors.green[900],
           );
           actionButtons = Container();
         }
@@ -281,7 +321,7 @@ class _AuthenticateState extends State<Authenticate> {
         return Card(
           margin: EdgeInsets.zero,
           elevation: 0.0,
-          color: Hexcolor('#DFE9AC'),
+          color: Colors.white,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -296,7 +336,7 @@ class _AuthenticateState extends State<Authenticate> {
                     Text(
                       titleText,
                       style:
-                          TextStyle(color: Hexcolor('#28590C'), fontSize: 12.0),
+                          TextStyle(color: Colors.green[900], fontSize: 12.0),
                     ),
                   ],
                 ),
@@ -325,7 +365,7 @@ class _AuthenticateState extends State<Authenticate> {
                           ? Container()
                           : Divider(
                               height: 20.0,
-                              color: Hexcolor('#97BE11'),
+                              color: Colors.green[500],
                               thickness: 1.0,
                             ),
                     ],

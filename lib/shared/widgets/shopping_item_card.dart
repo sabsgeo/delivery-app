@@ -1,14 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:vegitabledelivery/models/fresh_green.dart';
 import 'package:vegitabledelivery/services/image.dart';
 import 'package:vegitabledelivery/shared/widgets/increment_decrement_button.dart';
-import 'package:vegitabledelivery/singletons/app_data.dart';
 
 class ShoppingItemCard extends StatelessWidget {
-  final int index;
+  final FreshGreen eachItem;
   final bool enableAddToCart;
-  ShoppingItemCard({@required this.index, @required this.enableAddToCart});
+  ShoppingItemCard({@required this.eachItem, @required this.enableAddToCart});
   final refStorage = FireStorageService();
 
   Future<String> _getImage({String image}) async {
@@ -22,14 +21,14 @@ class ShoppingItemCard extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
       child: Card(
         elevation: 5,
-        color: Hexcolor('#DFE9AC'),
+        color: Colors.white,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             FutureBuilder(
               future: this._getImage(
                   image:
-                      'fresh_green/${appData.freshGreen[this.index].image}'),
+                      'fresh_green/${eachItem.image}'),
               builder: (context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState != ConnectionState.done) {
                   return Image.asset(
@@ -54,16 +53,19 @@ class ShoppingItemCard extends StatelessWidget {
                   Icon(
                     Icons.brightness_1,
                     size: 12.0,
-                    color: appData.freshGreen[this.index].isVeg
-                        ? Hexcolor('#97BE11')
-                        : Hexcolor('#DC1E0B'),
+                    color: eachItem.isVeg
+                        ? Colors.green[500]
+                        : Colors.red[900],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(2.0, 0.0, 0.0, 0.0),
-                    child: Text(
-                      '${appData.freshGreen[this.index].name} (${appData.freshGreen[this.index].minQuantity})',
-                      style:
-                          TextStyle(fontSize: 12.0, color: Hexcolor('#28590C')),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(2.0, 0.0, 0.0, 0.0),
+                      child: Text(
+                        '${eachItem.name} (${eachItem.minQuantity})',
+                        overflow: TextOverflow.visible,
+                        style:
+                            TextStyle(fontSize: 10.0, color: Colors.green[900]),
+                      ),
                     ),
                   ),
                 ],
@@ -75,12 +77,12 @@ class ShoppingItemCard extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.all(6.0),
                   child: Text(
-                    '\u20B9${appData.freshGreen[this.index].price}',
+                    '\u20B9${eachItem.price}',
                     style:
-                        TextStyle(fontSize: 12.0, color: Hexcolor('#28590C')),
+                        TextStyle(fontSize: 10.0, color: Colors.green[900]),
                   ),
                 ),
-                this.enableAddToCart ? IncrementDecrementButton(index: this.index): Container()
+                this.enableAddToCart ? IncrementDecrementButton(eachItem): Container()
               ],
             ),
           ],

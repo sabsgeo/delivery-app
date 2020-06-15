@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:vegitabledelivery/models/fresh_green.dart';
+import 'package:provider/provider.dart';
+import 'package:vegitabledelivery/models/ordered_items.dart';
 import 'package:vegitabledelivery/services/order.dart';
 import 'package:vegitabledelivery/shared/widgets/increment_decrement_button.dart';
 import 'package:vegitabledelivery/singletons/app_data.dart';
@@ -20,51 +20,60 @@ class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
     double total = 0;
-    appData.orderedItems.keys.toList().forEach((element) {
-      FreshGreen selectedItem = appData.freshGreen[
-          int.parse(appData.orderedItems[element]['index'].toString())];
-      total += double.parse(selectedItem.price) *
-          appData.orderedItems[element]['num'];
+    Map<String, EachOrderedItem> selectedItems =
+        Provider.of<Map<String, EachOrderedItem>>(context, listen: false);
+    List<String> allSelectedItemUid =
+        selectedItems.keys.length > 0 ? selectedItems.keys.toList() : [];
+    selectedItems.forEach((key, value) {
+      total += double.parse(value.item.price) * value.num;
     });
+    var model = Provider.of<OrderedItems>(context);
     return SafeArea(
       child: this.orderPlaced
           ? Scaffold(
-              backgroundColor: Hexcolor('#DFE9AC'),
+              backgroundColor: Colors.white,
               appBar: AppBar(
                 elevation: 0.0,
-                backgroundColor: Hexcolor('#DFE9AC'),
+                backgroundColor: Colors.white,
               ),
               body: Center(
                 child: SpinKitCubeGrid(
-                  color: Hexcolor('#97BE11'),
+                  color: Colors.green[500],
                   size: 80.0,
                 ),
               ))
           : Scaffold(
-              backgroundColor: Hexcolor('#DFE9AC'),
+              backgroundColor: Colors.white,
               appBar: this.widget.userAuthenticated &&
-                      appData.orderedItems.keys.length > 0
+                      Provider.of<Map<String, EachOrderedItem>>(context,
+                                  listen: false)
+                              .keys
+                              .length >
+                          0
                   ? AppBar(
                       elevation: 2.0,
-                      backgroundColor: Hexcolor('#DFE9AC'),
+                      backgroundColor: Colors.white,
                       title: Text(
                         'REVIEW ORDER',
-                        style: TextStyle(
-                            fontSize: 18.0, color: Hexcolor('#28590C')),
+                        style:
+                            TextStyle(fontSize: 18.0, color: Colors.green[900]),
                       ),
                       leading: IconButton(
                         icon: Icon(Icons.arrow_back_ios,
-                            color: Hexcolor('#FFA820')),
-                        onPressed: () =>
-                            Navigator.pushReplacementNamed(context, '/'),
+                            color: Colors.green[900]),
+                        onPressed: () => Navigator.pop(context),
                       ),
                     )
                   : AppBar(
                       elevation: 0.0,
-                      backgroundColor: Hexcolor('#DFE9AC'),
+                      backgroundColor: Colors.white,
                     ),
               body: this.widget.userAuthenticated &&
-                      appData.orderedItems.keys.length > 0
+                      Provider.of<Map<String, EachOrderedItem>>(context,
+                                  listen: false)
+                              .keys
+                              .length >
+                          0
                   ? Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: ListView(
@@ -74,47 +83,39 @@ class _CartState extends State<Cart> {
                             child: Padding(
                               padding: const EdgeInsets.all(0.0),
                               child: Card(
-                                color: Hexcolor('#DFE9AC'),
+                                color: Colors.white,
                                 child: Padding(
                                   padding: const EdgeInsets.fromLTRB(
                                       0.0, 10.0, 0.0, 10.0),
                                   child: ListView.builder(
                                       scrollDirection: Axis.vertical,
                                       shrinkWrap: true,
-                                      itemCount:
-                                          appData.orderedItems.keys.length,
+                                      itemCount: Provider.of<
+                                                  Map<String, EachOrderedItem>>(
+                                              context,
+                                              listen: false)
+                                          .keys
+                                          .length,
                                       itemBuilder: (builderContext, index) {
-                                        int mainIndex = int.parse(appData
-                                            .orderedItems[appData
-                                                .orderedItems.keys
-                                                .toList()[index]]['index']
-                                            .toString());
-                                        int quantityOfItem = int.parse(appData
-                                            .orderedItems[appData
-                                                .orderedItems.keys
-                                                .toList()[index]]['num']
-                                            .toString());
-                                        FreshGreen selectedItem =
-                                            appData.freshGreen[int.parse(appData
-                                                .orderedItems[appData
-                                                    .orderedItems.keys
-                                                    .toList()[index]]['index']
-                                                .toString())];
+                                        EachOrderedItem eachSelectedItem =
+                                            selectedItems[
+                                                allSelectedItemUid[index]];
                                         return ListTile(
                                           title: Row(
                                             children: <Widget>[
                                               Icon(
                                                 Icons.brightness_1,
                                                 size: 12.0,
-                                                color: selectedItem.isVeg
-                                                    ? Hexcolor('#97BE11')
-                                                    : Hexcolor('#DC1E0B'),
+                                                color:
+                                                    eachSelectedItem.item.isVeg
+                                                        ? Colors.green[500]
+                                                        : Colors.red[900],
                                               ),
                                               SizedBox(
                                                 width: 4.0,
                                               ),
                                               Text(
-                                                '${selectedItem.name} (${selectedItem.minQuantity})',
+                                                '${eachSelectedItem.item.name} (${eachSelectedItem.item.minQuantity})',
                                                 style:
                                                     TextStyle(fontSize: 12.0),
                                               )
@@ -128,18 +129,15 @@ class _CartState extends State<Cart> {
                                               child: Row(
                                                 children: <Widget>[
                                                   IncrementDecrementButton(
-                                                    index: mainIndex,
-                                                    onIncrement: () {
-                                                      setState(() {});
-                                                    },
-                                                    onDecrement: () {
-                                                      setState(() {});
-                                                    },
+                                                    eachSelectedItem.item,
                                                   ),
                                                   Text(
-                                                    (double.parse(selectedItem
-                                                                .price) *
-                                                            quantityOfItem)
+                                                    (double.parse(
+                                                                eachSelectedItem
+                                                                    .item
+                                                                    .price) *
+                                                            eachSelectedItem
+                                                                .num)
                                                         .toString(),
                                                     style: TextStyle(
                                                         fontSize: 10.0),
@@ -180,39 +178,37 @@ class _CartState extends State<Cart> {
                           ),
                           Theme(
                             data: Theme.of(context)
-                                .copyWith(dividerColor: Hexcolor('#DFE9AC')),
+                                .copyWith(dividerColor: Colors.white),
                             child: ExpansionTile(
                               initiallyExpanded: false,
                               title: Text(
-                                appData.selectedAddress == null ? 'Select address': 'Address selected',
+                                appData.selectedAddress == null
+                                    ? 'Select address'
+                                    : 'Address selected',
                                 style: TextStyle(
                                   fontSize: 12.0,
-                                  color: Hexcolor('#28590C'),
+                                  color: Colors.green[900],
                                 ),
                               ),
-                              subtitle: Text(
-                                appData.selectedAddress == null
-                                    ? ''
-                                    : '${appData.selectedAddress.house}, ${appData.selectedAddress.landmark}, ${appData.selectedAddress.subThoroughfare}, ${appData.selectedAddress.subLocality}, ${appData.selectedAddress.locality}, ${appData.selectedAddress.administrativeArea}, ${appData.selectedAddress.postalCode}, ${appData.selectedAddress.country}',
-                                style: TextStyle(
-                                  fontSize: 8.0,
-                                  color: Hexcolor('#28590C'),
-                                ),
-                              ),
-                              trailing: IconButton(
-                                icon: Icon(
-                                  Icons.keyboard_arrow_right,
-                                  size: 18.0,
-                                  color: Hexcolor('#FFA820'),
-                                ),
-                                onPressed: () async {
-                                  await Navigator.pushNamed(
-                                      context, '/list-address',
-                                      arguments: {'isSelectAddress': true});
-                                  setState(() {
-
-                                  });
-                                },
+                              subtitle: appData.selectedAddress == null
+                                  ? null
+                                  : Text(
+                                      '${appData.selectedAddress.house}, ${appData.selectedAddress.landmark}, ${appData.selectedAddress.subThoroughfare}, ${appData.selectedAddress.subLocality}, ${appData.selectedAddress.locality}, ${appData.selectedAddress.administrativeArea}, ${appData.selectedAddress.postalCode}, ${appData.selectedAddress.country}',
+                                      style: TextStyle(
+                                        fontSize: 8.0,
+                                        color: Colors.green[900],
+                                      ),
+                                    ),
+                              onExpansionChanged: (state) async {
+                                await Navigator.pushNamed(
+                                    context, '/list-address',
+                                    arguments: {'isSelectAddress': true});
+                                setState(() {});
+                              },
+                              trailing: Icon(
+                                Icons.keyboard_arrow_right,
+                                size: 18.0,
+                                color: Colors.amber[500],
                               ),
                             ),
                           ),
@@ -221,79 +217,105 @@ class _CartState extends State<Cart> {
                             child: SizedBox(
                               width: double.infinity,
                               child: RaisedButton(
-                                color: Hexcolor('#97BE11'),
-                                onPressed: appData.selectedAddress == null? null: () async {
-                                  setState(() {
-                                    this.orderPlaced = true;
-                                  });
-                                  await OrderItems().completeOrder();
-                                  appData.selectedAddress = null;
-                                  Navigator.pushReplacementNamed(
-                                      context, '/success');
-                                },
+                                color: Colors.green[500],
+                                onPressed: appData.selectedAddress == null
+                                    ? null
+                                    : () async {
+                                        setState(() {
+                                          this.orderPlaced = true;
+                                        });
+                                        var finalOrder = {};
+                                        Provider.of<
+                                                    Map<String,
+                                                        EachOrderedItem>>(
+                                                context,
+                                                listen: false)
+                                            .forEach((key, value) {
+                                          finalOrder[key] = {
+                                            'num': value.num,
+                                            'price': value.item.price,
+                                            'minQuantity':
+                                                value.item.minQuantity,
+                                            'name': value.item.name,
+                                            'isVeg': value.item.isVeg
+                                          };
+                                        });
+                                        await OrderItems()
+                                            .completeOrder(finalOrder);
+                                        model.clearAllData();
+                                        appData.selectedAddress = null;
+                                        Navigator.pushReplacementNamed(
+                                            context, '/success');
+                                      },
                                 child: Text("Place Order",
-                                    style:
-                                        TextStyle(color: Hexcolor('#28590C'))),
+                                    style: TextStyle(color: Colors.green[900])),
                               ),
                             ),
                           )
                         ],
                       ),
                     )
-                  : Center(
-                      child: Container(
+                  : Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 0, horizontal: 15.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                              width: 200.0,
-                              height: 200.0,
-                              decoration: new BoxDecoration(
-                                  image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image:
-                                          AssetImage('assets/green_veg.jpg')))),
-                          SizedBox(height: 15.0),
-                          SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              "DELIVERY AT DOOR STEP",
-                              style: TextStyle(
-                                color: Hexcolor('#28590C'),
-                                fontSize: 16.0,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                                width: MediaQuery.of(context).size.height >
+                                        MediaQuery.of(context).size.width
+                                    ? MediaQuery.of(context).size.width * .75
+                                    : MediaQuery.of(context).size.height * .75,
+                                height: MediaQuery.of(context).size.height >
+                                        MediaQuery.of(context).size.width
+                                    ? MediaQuery.of(context).size.width * .75
+                                    : MediaQuery.of(context).size.height * .75,
+                                decoration: new BoxDecoration(
+                                    image: new DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: AssetImage(
+                                            'assets/online-shopping.jpg')))),
+                            SizedBox(height: 15.0),
+                            SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                "DELIVERY AT DOOR STEP",
+                                style: TextStyle(
+                                  color: Colors.green[900],
+                                  fontSize: 16.0,
+                                ),
+                                textAlign: TextAlign.left,
                               ),
-                              textAlign: TextAlign.left,
                             ),
-                          ),
-                          SizedBox(height: 10.0),
-                          SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              "Your cart is empty. Add something from the items",
-                              style: TextStyle(
-                                color: Hexcolor('#28590C'),
-                                fontSize: 10.0,
+                            SizedBox(height: 10.0),
+                            SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                "Your cart is empty. Add something from the items",
+                                style: TextStyle(
+                                  color: Colors.green[900],
+                                  fontSize: 10.0,
+                                ),
+                                textAlign: TextAlign.left,
                               ),
-                              textAlign: TextAlign.left,
                             ),
-                          ),
-                          SizedBox(height: 10.0),
-                          SizedBox(
-                            width: double.infinity,
-                            child: RaisedButton(
-                              color: Hexcolor('#97BE11'),
-                              onPressed: () {
-                                Navigator.pushReplacementNamed(context, '/');
-                              },
-                              child: Text("Add Items",
-                                  style: TextStyle(color: Hexcolor('#28590C'))),
-                            ),
-                          )
-                        ],
+                            SizedBox(height: 10.0),
+                            SizedBox(
+                              width: double.infinity,
+                              child: RaisedButton(
+                                color: Colors.green[500],
+                                onPressed: () {
+                                  Navigator.pushReplacementNamed(context, '/');
+                                },
+                                child: Text("Add Items",
+                                    style: TextStyle(color: Colors.green[900])),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ))),
+                    )),
     );
   }
 }

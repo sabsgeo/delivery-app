@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:vegitabledelivery/services/order.dart';
 import 'package:vegitabledelivery/shared/constants.dart';
 
@@ -33,12 +32,12 @@ class _RateUsState extends State<RateUs> {
       hintField = 'Feedback...';
     }
     return Scaffold(
-        backgroundColor: Hexcolor('#DFE9AC'),
+        backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Hexcolor('#DFE9AC'),
+          backgroundColor: Colors.white,
           leading: IconButton(
-            icon: Icon(Icons.clear, color: Hexcolor('#FFA820')),
+            icon: Icon(Icons.clear, color: Colors.amber[500]),
             onPressed: () => Navigator.pushReplacementNamed(context, '/'),
           ),
         ),
@@ -51,7 +50,7 @@ class _RateUsState extends State<RateUs> {
                 Text(
                   'Rate your Order',
                   style: TextStyle(
-                      color: Hexcolor('#28590C'), fontWeight: FontWeight.w900),
+                      color: Colors.green[900], fontWeight: FontWeight.w900),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -59,7 +58,7 @@ class _RateUsState extends State<RateUs> {
                     IconButton(
                         icon: Icon(
                           rateUs >= 1 ? Icons.star : Icons.star_border,
-                          color: Hexcolor('#FFA820'),
+                          color: Colors.amber[500],
                         ),
                         onPressed: () {
                           setState(() {
@@ -68,7 +67,7 @@ class _RateUsState extends State<RateUs> {
                         }),
                     IconButton(
                         icon: Icon(rateUs >= 2 ? Icons.star : Icons.star_border,
-                            color: Hexcolor('#FFA820')),
+                            color: Colors.amber[500]),
                         onPressed: () {
                           setState(() {
                             rateUs = 2;
@@ -76,7 +75,7 @@ class _RateUsState extends State<RateUs> {
                         }),
                     IconButton(
                         icon: Icon(rateUs >= 3 ? Icons.star : Icons.star_border,
-                            color: Hexcolor('#FFA820')),
+                            color: Colors.amber[500]),
                         onPressed: () {
                           setState(() {
                             rateUs = 3;
@@ -84,7 +83,7 @@ class _RateUsState extends State<RateUs> {
                         }),
                     IconButton(
                         icon: Icon(rateUs >= 4 ? Icons.star : Icons.star_border,
-                            color: Hexcolor('#FFA820')),
+                            color: Colors.amber[500]),
                         onPressed: () {
                           setState(() {
                             rateUs = 4;
@@ -92,7 +91,7 @@ class _RateUsState extends State<RateUs> {
                         }),
                     IconButton(
                         icon: Icon(rateUs >= 5 ? Icons.star : Icons.star_border,
-                            color: Hexcolor('#FFA820')),
+                            color: Colors.amber[500]),
                         onPressed: () {
                           setState(() {
                             rateUs = 5;
@@ -119,7 +118,7 @@ class _RateUsState extends State<RateUs> {
                   height: 10.0,
                 ),
                 RaisedButton(
-                  color: Hexcolor('#97BE11'),
+                  color: Colors.green[500],
                   onPressed: this.rateUs > 0 ? this.submitted ? null: () async {
                     setState(() {
                       this.submitted = true;
@@ -128,7 +127,7 @@ class _RateUsState extends State<RateUs> {
                     Navigator.pushReplacementNamed(context, '/');
                   }: null,
                   child: Text("Submit",
-                      style: TextStyle(color: Hexcolor('#28590C'))),
+                      style: TextStyle(color: Colors.green[900])),
                 )
               ],
             ),

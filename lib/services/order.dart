@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vegitabledelivery/models/order.dart';
 import 'package:vegitabledelivery/models/user.dart';
@@ -9,11 +11,11 @@ class OrderItems {
       Firestore.instance.collection('user_orders');
   final _auth = AuthService();
   OrderItems();
-  Future completeOrder() async {
+  Future completeOrder(orderedItems) async {
     User user = await _auth.user.first;
     await orderCollection.document().setData({
       'user': user.uid,
-      'items': appData.orderedItems,
+      'items': orderedItems,
       'order_status': OrderStatus.AWAITING_CONFORMATION.toString(),
       'rating': -1,
       'ordered_time': DateTime.now().millisecondsSinceEpoch,
@@ -21,7 +23,6 @@ class OrderItems {
       'cancelled_time': 0,
       'address': appData.selectedAddress.getAllData()
     });
-    appData.orderedItems = {};
   }
 
   Future<List<Order>> latestNOrders(int N) async {
@@ -47,7 +48,7 @@ class OrderItems {
     return finalData;
   }
 
-  Future<Map<String,dynamic>> getOrder(String orderId) async {
+  Future<Map<String, dynamic>> getOrder(String orderId) async {
     List<Order> finalData = [];
     User user = await _auth.user.first;
     DocumentSnapshot orderInfo = await orderCollection.document(orderId).get();
@@ -55,15 +56,14 @@ class OrderItems {
   }
 
   Future rateOrder(String orderId, int rating, String feedback) async {
-    await orderCollection.document(orderId).updateData({
-      'rating': rating,
-      'feedback': feedback
-    });
+    await orderCollection
+        .document(orderId)
+        .updateData({'rating': rating, 'feedback': feedback});
   }
 
   Future cancelOrder(String orderId) async {
-    await orderCollection.document(orderId).updateData({
-      'order_status': OrderStatus.ORDER_CANCELLED.toString()
-    });
+    await orderCollection
+        .document(orderId)
+        .updateData({'order_status': OrderStatus.ORDER_CANCELLED.toString()});
   }
 }

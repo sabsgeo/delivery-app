@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:vegitabledelivery/services/auth.dart';
 import 'package:vegitabledelivery/services/user_database.dart';
 import 'package:vegitabledelivery/shared/constants.dart';
 
@@ -19,12 +17,12 @@ class _PhoneNumberState extends State<PhoneNumber> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Hexcolor('#DFE9AC'),
+        backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Hexcolor('#DFE9AC'),
+          backgroundColor: Colors.white,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: Hexcolor('#FFA820')),
+            icon: Icon(Icons.arrow_back_ios, color: Colors.green[900]),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
@@ -37,7 +35,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
                     Text(
                       "ALMOST THERE!",
                       style: TextStyle(
-                        color: Hexcolor('#28590C'),
+                        color: Colors.green[900],
                         fontSize: 16.0,
                       ),
                       textAlign: TextAlign.left,
@@ -46,7 +44,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
                     Text(
                       "Login or Sign up to place your order",
                       style:
-                          TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0),
+                          TextStyle(color: Colors.green[900], fontSize: 10.0),
                       textAlign: TextAlign.left,
                     ),
                     SizedBox(height: 10.0),
@@ -72,7 +70,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
                     ),
                     SizedBox(height: 15.0),
                     RaisedButton(
-                      color: Hexcolor('#97BE11'),
+                      color: Colors.green[500],
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           UserDatabaseService db = UserDatabaseService();
@@ -88,7 +86,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
                         }
                       },
                       child: Text("Proceed",
-                          style: TextStyle(color: Hexcolor('#28590C'))),
+                          style: TextStyle(color: Colors.green[900])),
                     ),
                   ],
                 ))));

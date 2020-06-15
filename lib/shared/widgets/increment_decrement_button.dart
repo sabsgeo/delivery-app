@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:vegitabledelivery/singletons/app_data.dart';
+import 'package:provider/provider.dart';
+import 'package:vegitabledelivery/models/fresh_green.dart';
+import 'package:vegitabledelivery/models/ordered_items.dart';
 
-class IncrementDecrementButton extends StatefulWidget {
-  final int index;
-  final Function onIncrement;
-  final Function onDecrement;
-  IncrementDecrementButton(
-      {@required this.index, this.onIncrement, this.onDecrement});
-  @override
-  _IncrementDecrementButtonState createState() =>
-      _IncrementDecrementButtonState();
-}
+class IncrementDecrementButton extends StatelessWidget {
+  final FreshGreen eachItem;
+  IncrementDecrementButton(this.eachItem);
 
-class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
   @override
   Widget build(BuildContext context) {
+    var model = Provider.of<OrderedItems>(context);
     return ButtonBar(
       children: <Widget>[
         Row(
@@ -25,31 +19,25 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
               width: 18.0,
               child: RawMaterialButton(
                 onPressed: () {
-                  setState(() {
-                    if (appData.orderedItems.containsKey(
-                            appData.freshGreen[this.widget.index].uid) &&
-                        appData.orderedItems[appData
-                                .freshGreen[this.widget.index].uid]['num'] >
-                            0) {
-                      appData.orderedItems[appData
-                          .freshGreen[this.widget.index].uid]['num'] -= 1;
-                    } else {
-                      appData.orderedItems
-                          .remove(appData.freshGreen[this.widget.index].uid);
-                    }
-                  });
-                  if (this.widget.onDecrement != null) {
-                    this.widget.onDecrement();
+                  if (Provider.of<Map<String, EachOrderedItem>>(context,
+                              listen: false)
+                          .containsKey(eachItem.uid) &&
+                      Provider.of<Map<String, EachOrderedItem>>(context,
+                                  listen: false)[eachItem.uid]
+                              .num >
+                          1) {
+                    model.decrementExistingItem(eachItem.uid);
+                  } else {
+                    model.removeAnItemCompletely(eachItem.uid);
                   }
                 },
-                fillColor: Hexcolor('#97BE11'),
+                fillColor: Colors.green[500],
                 child: Icon(
                   Icons.remove,
-                  size: 12.0,
-                  color: Hexcolor('#28590C'),
+                  size: 18.0,
+                  color: Colors.green[900],
                 ),
                 padding: EdgeInsets.all(0.0),
-                shape: CircleBorder(),
               ),
             ),
             Padding(
@@ -59,15 +47,16 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
                   width: 18.0,
                   child: Center(
                       child: Text(
-                          appData.orderedItems[appData
-                                      .freshGreen[this.widget.index].uid] ==
+                          Provider.of<Map<String, EachOrderedItem>>(
+                                      context)[eachItem.uid] ==
                                   null
                               ? "0"
-                              : appData.orderedItems[appData
-                                      .freshGreen[this.widget.index].uid]['num']
+                              : Provider.of<Map<String, EachOrderedItem>>(
+                                      context)[eachItem.uid]
+                                  .num
                                   .toString(),
                           style: TextStyle(
-                              fontSize: 12.0, color: Hexcolor('#28590C')),
+                              fontSize: 12.0, color: Colors.green[900]),
                           textAlign: TextAlign.center))),
             ),
             SizedBox(
@@ -75,36 +64,23 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
               width: 18.0,
               child: RawMaterialButton(
                 onPressed: () {
-                  setState(() {
-                    if (appData.orderedItems.containsKey(
-                        appData.freshGreen[this.widget.index].uid)) {
-                      appData.orderedItems[appData
-                          .freshGreen[this.widget.index].uid]['num'] += 1;
-                    } else {
-                      appData.orderedItems[
-                          appData.freshGreen[this.widget.index].uid] = {
-                        'num': 1,
-                        'index': this.widget.index,
-                        'name': appData.freshGreen[this.widget.index].name,
-                        'minQuantity':
-                            appData.freshGreen[this.widget.index].minQuantity,
-                        'price': appData.freshGreen[this.widget.index].price,
-                        'isVeg': appData.freshGreen[this.widget.index].isVeg
-                      };
-                    }
-                  });
-                  if (this.widget.onIncrement != null) {
-                    this.widget.onIncrement();
+                  if (Provider.of<Map<String, EachOrderedItem>>(context,
+                          listen: false)
+                      .containsKey(eachItem.uid)) {
+                    model.incrementExistingItem(eachItem.uid);
+                  } else {
+                    model.addNewItem(
+                        eachItem.uid,
+                        EachOrderedItem(eachItem, 1));
                   }
                 },
-                fillColor: Hexcolor('#97BE11'),
+                fillColor: Colors.green[500],
                 child: Icon(
                   Icons.add,
-                  size: 12.0,
-                  color: Hexcolor('#28590C'),
+                  size: 18.0,
+                  color: Colors.green[900],
                 ),
                 padding: EdgeInsets.all(0.0),
-                shape: CircleBorder(),
               ),
             ),
           ],

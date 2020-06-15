@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:vegitabledelivery/services/auth.dart';
 
 class ExpansionPanelCustom extends StatefulWidget {
@@ -22,41 +21,44 @@ class _ExpansionPanelCustomState extends State<ExpansionPanelCustom> {
       itemCount: this.widget.data.length,
       itemBuilder: (BuildContext context, int index) {
         return Theme(
-          data: Theme.of(context).copyWith(dividerColor: Hexcolor('#DFE9AC')),
+          data: Theme.of(context).copyWith(dividerColor: Colors.white),
           child: ExpansionTile(
             initiallyExpanded: false,
             title: Text(
               this.widget.data[index]['headerValue'],
               style: TextStyle(
                 fontSize: 12.0,
-                color: Hexcolor('#28590C'),
+                color: Colors.green[900],
               ),
             ),
             trailing: this.widget.data[index]['headerValue'] == 'Logout'
                 ? Icon(
                     Icons.power_settings_new,
                     size: 18.0,
-                    color: Hexcolor('#FFA820'),
+                    color: Colors.amber[500],
                   )
                 : this.widget.data[index]['isExpanded']
                     ? Icon(
                         Icons.keyboard_arrow_down,
                         size: 18.0,
-                        color: Hexcolor('#FFA820'),
+                        color: Colors.amber[500],
                       )
                     : Icon(
                         Icons.keyboard_arrow_right,
                         size: 18.0,
-                        color: Hexcolor('#FFA820'),
+                        color: Colors.amber[500],
                       ),
             children: this.widget.children(index),
             onExpansionChanged: (state) async {
               setState(() {
-                this.widget.data[index]['isExpanded'] = state;
+                if (this.widget.data[index]['headerValue'] == 'Orders') {
+                  this.widget.data[index]['isExpanded'] = state;
+                }
               });
               if (this.widget.data[index]['headerValue'] == 'Logout') {
                 await _auth.signOut();
-              } else if (this.widget.data[index]['headerValue'] == 'Manage Address') {
+              } else if (this.widget.data[index]['headerValue'] ==
+                  'Manage Address') {
                 await Navigator.pushNamed(context, '/list-address');
               }
             },

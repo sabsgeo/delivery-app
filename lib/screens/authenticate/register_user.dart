@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:vegitabledelivery/services/auth.dart';
 import 'package:vegitabledelivery/shared/constants.dart';
 
 class RegisterUser extends StatefulWidget {
@@ -23,12 +21,12 @@ class _RegisterUserState extends State<RegisterUser> {
   Widget build(BuildContext context) {
     Map phoneData = ModalRoute.of(context).settings.arguments;
     return Scaffold(
-      backgroundColor: Hexcolor('#DFE9AC'),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: Hexcolor('#DFE9AC'),
+        backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Hexcolor('#FFA820')),
+          icon: Icon(Icons.arrow_back_ios, color: Colors.green[900]),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -41,7 +39,7 @@ class _RegisterUserState extends State<RegisterUser> {
                   Text(
                     "SIGN UP",
                     style: TextStyle(
-                      color: Hexcolor('#28590C'),
+                      color: Colors.green[900],
                       fontSize: 16.0,
                     ),
                     textAlign: TextAlign.left,
@@ -50,7 +48,7 @@ class _RegisterUserState extends State<RegisterUser> {
                   Text(
                     "Create an account with the new phone number",
                     style:
-                        TextStyle(color: Hexcolor('#28590C'), fontSize: 10.0),
+                        TextStyle(color: Colors.green[900], fontSize: 10.0),
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 10.0),
@@ -130,7 +128,7 @@ class _RegisterUserState extends State<RegisterUser> {
                   ),
                   SizedBox(height: 15.0),
                   RaisedButton(
-                    color: Hexcolor('#97BE11'),
+                    color: Colors.green[500],
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
                         Navigator.pushNamed(context, '/sms-code', arguments: {
