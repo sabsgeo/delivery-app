@@ -8,7 +8,8 @@ import 'package:vegitabledelivery/shared/widgets/shopping_item_card.dart';
 
 class Home extends StatelessWidget {
   final bool userAuthenticated;
-  Home(this.userAuthenticated);
+  final String userType;
+  Home(this.userAuthenticated, {this.userType});
   @override
   Widget build(BuildContext context) {
     String itemToShow = (ModalRoute.of(context).settings.arguments as Map)['itemToShow'].toString();
@@ -80,6 +81,7 @@ class Home extends StatelessWidget {
                                       : ShoppingItemCard(
                                           eachItem: itemData[index * 2],
                                           enableAddToCart: this.userAuthenticated,
+                                    userType: this.userType,
                                         )),
                               SizedBox(width: spacing,),
                               SizedBox(
@@ -89,6 +91,7 @@ class Home extends StatelessWidget {
                                       : ShoppingItemCard(
                                           eachItem: itemData[index * 2 + 1],
                                           enableAddToCart: this.userAuthenticated,
+                                    userType: this.userType,
                                         )),
                             ],
                           ),
@@ -96,7 +99,7 @@ class Home extends StatelessWidget {
                       },
                     ),
                   ),
-                  ButtonCartSummary()
+                  this.userType == 'ADMIN'? Container(height: 0.0,): ButtonCartSummary()
                 ],
               ),
             ),

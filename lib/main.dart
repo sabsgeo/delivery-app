@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,6 +15,7 @@ import 'package:vegitabledelivery/screens/authenticate/sms_code.dart';
 import 'package:vegitabledelivery/screens/cart/cart.dart';
 import 'package:vegitabledelivery/screens/cart/summary.dart';
 import 'package:vegitabledelivery/screens/home/home.dart';
+import 'package:vegitabledelivery/screens/image_opt/main_page.dart';
 import 'package:vegitabledelivery/screens/rate_us.dart';
 import 'package:vegitabledelivery/screens/success.dart';
 import 'package:vegitabledelivery/screens/wrapper.dart';
@@ -28,8 +30,17 @@ void setupLocator() {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+//  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+//    statusBarColor: Colors.transparent,
+//    statusBarBrightness: Brightness.dark,
+//    statusBarIconBrightness: Brightness.light,
+//    systemNavigationBarIconBrightness: Brightness.light,
+//  ));
   setupLocator();
   return runApp(MyApp());
+  return runApp(MainCustomerApp());
+
+
 }
 
 class MyApp extends StatelessWidget {
